@@ -1,0 +1,91 @@
+@font-face {
+	font-family: 'Raleway';
+	font-display: swap;
+	src: url(../fonts/Raleway-Regular.ttf);
+}
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+body {
+	font-family: 'Raleway', sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #ceffef;
+}
+
+.recorder {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	row-gap: 1.5rem;
+}
+/* Buttons */
+.recorder__buttons {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	column-gap: 1rem;
+}
+.button {
+	padding: 0.6rem 1.4rem;
+	font-weight: bold;
+	font-size: 1.2rem;
+	border-radius: 0.6rem;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+.recorder__record-btn {
+	/* width: 160px; */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	column-gap: 0.5rem;
+	border-radius: 100rem;
+	border: 2px solid tomato;
+	background-color: #000;
+	color: tomato;
+}
+.recorder__circle-btn {
+	width: 15px;
+	height: 15px;
+	border: 3px solid #000;
+	border-radius: 100rem;
+	color: tomato;
+	background-color: tomato;
+	box-shadow: 0 0 0 1px tomato;
+}
+.recorder__stop-btn {
+    padding-left: 1.7rem;
+	border: 2px solid #ffac00;
+	background-color: #000;
+    color: #ffac00;
+	transition: all 0.2s;
+}
+.recorder__stop-symbol {
+	opacity: 0;
+	transition: all 0.2s;
+	color: #000;
+}
+/* Effects */
+.recorder__record-btn:hover {
+	background-color: tomato;
+	color: #000;
+}
+.recorder__record-btn:hover > .recorder__circle-btn {
+	background-color: tomato;
+	box-shadow: 0 0 0 2px #000;
+	border: 3px solid tomato;
+}
+.recorder__stop-btn:hover {
+	color: #000;
+	background-color: #ffac00;
+}
+.recorder__stop-btn:hover > .recorder__stop-symbol {
+	opacity: 1;
+	transition: all 0.2s;
+}
