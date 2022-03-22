@@ -1,46 +1,103 @@
-let btn = document.querySelector('.recorder__record-btn');
-let stopBtn = document.querySelector('.recorder__stop-btn');
+let stream = null;
+let audio = null;
+let mixedStream = null;
+let chunks = [];
+let recorder = null;
+let startButton = null;
+let stopButton = null;
+let downloadButton = null;
+let savedVideo = null;
 
-btn.addEventListener('click', async function () {
-	let stream = await navigator.mediaDevices.getDisplayMedia({
-		video: true,
-	});
-
-	//needed for better browser support
-	const mime = MediaRecorder.isTypeSupported('video/webm; codecs=vp9')
-		? 'video/webm; codecs=vp9'
-		: 'video/webm';
-	let mediaRecorder = new MediaRecorder(stream, {
-		mimeType: mime,
-	});
-	let chunks = [];
-	mediaRecorder.addEventListener('dataavailable', function (e) {
-		chunks.push(e.data);
-	});
-
-	stopBtn.onclick = stopHandler;
-	// mediaRecorder.addEventListener('stop', stopHandler);
-
-	function stopHandler() {
-		mediaRecorder.stop();
-		stream
-			.getTracks()
-			.forEach((track) => track.stop());
-
-		let blob = new Blob(chunks, {
-			type: chunks[0]?.type,
+async function setupStream() {
+	try {
+		stream = await navigator.mediaDevices.getDisplayMedia({
+			video: true,
 		});
-		let url = URL.createObjectURL(blob);
 
-		let video = document.querySelector('video');
-		video.src = url;
+		audio = await navigator.mediaDevices.getUserMedia({
+			audio: {
+				echoCancellation: true,
+				noiseSuppression: true,
+				sampleRate: 44100,
+			},
+		});
 
-		let a = document.createElement('a');
-		a.href = url;
-		a.download = 'video.webm';
-		a.click();
+		setupVideoFeedback();
+	} catch (err) {
+		console.error(err);
 	}
+}
 
-	//we have to start the recorder manually
-	mediaRecorder.start();
+function setupVideoFeedback() {
+	if (stream) {
+		const video = document.querySelector('#currentVideo');
+		video.srcObject = stream;
+		video.play();
+	} else {
+		console.warn('No stream available');
+	}
+}
+
+async function startRecording() {
+	await setupStream();
+
+	if (stream && audio) {
+		mixedStream = new MediaStream([...stream.getTracks(), ...audio.getTracks()]);
+		recorder = new MediaRecorder(mixedStream);
+		recorder.ondataavailable = handleDataAvailable;
+		recorder.onstop = handleStop;
+		recorder.start(1000);
+
+		startButton.disabled = true;
+		stopButton.disabled = false;
+
+		console.log('Recording started');
+	} else {
+		console.warn('No stream available.');
+	}
+}
+
+function stopRecording() {
+	recorder.stop();
+
+	startButton.disabled = false;
+	stopButton.disabled = true;
+}
+
+function handleDataAvailable(e) {
+	chunks.push(e.data);
+}
+
+function handleStop(e) {
+	const blob = new Blob(chunks, { type: 'video/mp4' });
+	chunks = [];
+
+	downloadButton.href = URL.createObjectURL(blob);
+	downloadButton.download = 'video.mp4';
+	downloadButton.disabled = false;
+
+	savedVideo.src = URL.createObjectURL(blob);
+	savedVideo.load();
+	savedVideo.onloadeddata = function () {
+		const rc = document.querySelector('#savedVideoWrapper');
+		rc.classList.remove('hidden');
+		rc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+		savedVideo.play();
+	};
+
+	stream.getTracks().forEach((track) => track.stop());
+	audio.getTracks().forEach((track) => track.stop());
+
+	console.log('Recording stopped');
+}
+
+window.addEventListener('load', () => {
+	startButton = document.querySelector('#startButton');
+	stopButton = document.querySelector('#stopButton');
+	downloadButton = document.querySelector('#downloadVideo');
+	savedVideo = document.querySelector('#savedVideo');
+
+	startButton.addEventListener('click', startRecording);
+	stopButton.addEventListener('click', stopRecording);
 });

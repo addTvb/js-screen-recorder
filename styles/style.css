@@ -1,3 +1,13 @@
+:root {
+	--record-color: #ff6347;
+	--stop-color: #ffac00;
+	--download-color: #02a102;
+	--background: #ceffef;
+
+	--circle-radius: 100rem;
+	--pressed-scale: scale(0.95);
+}
+
 @font-face {
 	font-family: 'Raleway';
 	font-display: swap;
@@ -14,15 +24,28 @@ body {
 	padding: 0;
 	background-color: #ceffef;
 }
+a {
+	text-decoration: none;
+}
 
-.recorder {
-	width: 100vw;
+.main {
+	width: 100%;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	row-gap: 10rem;
+}
+.recorder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	row-gap: 1.5rem;
+}
+.recorder__video {
+	width: 1200px;
 }
 /* Buttons */
 .recorder__buttons {
@@ -39,31 +62,30 @@ body {
 	cursor: pointer;
 	transition: all 0.2s;
 }
-.recorder__record-btn {
-	/* width: 160px; */
+.recorder__start-btn {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	column-gap: 0.5rem;
-	border-radius: 100rem;
-	border: 2px solid tomato;
+	border-radius: var(--circle-radius);
+	border: 2px solid var(--record-color);
 	background-color: #000;
-	color: tomato;
+	color: var(--record-color);
 }
 .recorder__circle-btn {
 	width: 15px;
 	height: 15px;
 	border: 3px solid #000;
-	border-radius: 100rem;
-	color: tomato;
-	background-color: tomato;
-	box-shadow: 0 0 0 1px tomato;
+	border-radius: var(--circle-radius);
+	color: var(--record-color);
+	background-color: var(--record-color);
+	box-shadow: 0 0 0 1px var(--record-color);
 }
 .recorder__stop-btn {
-    padding-left: 1.7rem;
-	border: 2px solid #ffac00;
+	padding-left: 1.7rem;
+	border: 2px solid var(--stop-color);
 	background-color: #000;
-    color: #ffac00;
+	color: var(--stop-color);
 	transition: all 0.2s;
 }
 .recorder__stop-symbol {
@@ -71,21 +93,44 @@ body {
 	transition: all 0.2s;
 	color: #000;
 }
+/* Saved */
+.saved {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	row-gap: 1.5rem;
+	padding-bottom: 10rem;
+}
+.hidden {
+	display: none;
+}
+.saved__video {
+	width: 600px;
+}
+.saved__download {
+	color: #fff;
+	background-color: var(--download-color);
+	border: 1px solid #fff;
+}
 /* Effects */
-.recorder__record-btn:hover {
-	background-color: tomato;
+.recorder__start-btn:hover {
+	background-color: var(--record-color);
 	color: #000;
 }
-.recorder__record-btn:hover > .recorder__circle-btn {
-	background-color: tomato;
+.recorder__start-btn:hover > .recorder__circle-btn {
+	background-color: var(--record-color);
 	box-shadow: 0 0 0 2px #000;
-	border: 3px solid tomato;
+	border: 3px solid var(--record-color);
 }
 .recorder__stop-btn:hover {
 	color: #000;
-	background-color: #ffac00;
+	background-color: var(--stop-color);
 }
 .recorder__stop-btn:hover > .recorder__stop-symbol {
 	opacity: 1;
 	transition: all 0.2s;
+}
+.button:active {
+	transform: var(--pressed-scale);
 }

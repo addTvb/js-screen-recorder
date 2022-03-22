@@ -1,24 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<link rel="stylesheet" href="./styles/style.css" />
-
-		<title>JS ScreenRecorder</title>
 		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./styles/style.css" />
+		<title>JS ScreenRecorder</title>
 	</head>
 	<body>
-		<main class="recorder">
-			<video class="video" width="600px" controls></video>
-			<div class="recorder__buttons">
-				<button class="recorder__record-btn button">
-					<span class="recorder__circle-btn"></span>
-					Record
-				</button>
-				<button class="recorder__stop-btn button">Stop<span class="recorder__stop-symbol">!</span> 
-                </button>
+		<main class="main">
+			<div class="recorder">
+				<video
+					class="recorder__video"
+					id="currentVideo"
+					autoplay
+					muted
+					controls
+				></video>
+				<div class="recorder__buttons">
+					<button class="recorder__start-btn button" id="startButton">
+						<span class="recorder__circle-btn"></span>
+						Record
+					</button>
+					<button class="recorder__stop-btn button" id="stopButton">
+						Stop<span class="recorder__stop-symbol">!</span>
+					</button>
+				</div>
+			</div>
+			<!-- Saved video -->
+			<div class="saved hidden" id="savedVideoWrapper">
+				<video class="saved__video" id="savedVideo" controls></video>
+				<a class="saved__download button" id="downloadVideo"> Download </a>
 			</div>
 		</main>
 
-		<script src="./js/script.js"></script>
+		<script src="./js/script.js" defer></script>
 	</body>
 </html>
